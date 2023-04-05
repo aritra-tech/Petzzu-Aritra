@@ -12,6 +12,15 @@
         android:theme="@style/Theme.Petzzu"
         tools:targetApi="31">
         <activity
+            android:name=".Dashboard"
+            android:exported="false" />
+        <activity
+            android:name=".AppointmentReminder"
+            android:exported="false" />
+        <activity
+            android:name=".Signuppage"
+            android:exported="false" />
+        <activity
             android:name=".SplashScreen"
             android:exported="true"
             android:theme="@style/SplashScreenColor">
@@ -23,9 +32,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false" />
     </application>
 
 </manifest>
