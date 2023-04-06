@@ -18,5 +18,11 @@ class Dashboard : AppCompatActivity() {
             val Intent = Intent(this,Notification::class.java)
             startActivity(Intent)
         }
+
+        val petf=findViewById<ImageView>(R.id.petfolio)
+        petf.setOnClickListener{
+            val Intent=Intent(this,Petfolio::class.java)
+            startActivity(Intent)
+        }
     }
 }

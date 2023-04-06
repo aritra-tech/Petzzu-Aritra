@@ -17,12 +17,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/set_alarm"
         android:text="Set Alarm"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/exit"
         android:text="Exit"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"/>
 
 </LinearLayout>
