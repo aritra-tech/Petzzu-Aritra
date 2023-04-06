@@ -3,5 +3,6 @@
     <array name="preloaded_fonts" translatable="false">
         <item>@font/arbutus</item>
         <item>@font/calistoga</item>
+        <item>@font/gravitas_one</item>
     </array>
 </resources>
