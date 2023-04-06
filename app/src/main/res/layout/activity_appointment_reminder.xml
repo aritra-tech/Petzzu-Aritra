@@ -19,7 +19,7 @@
             android:id="@+id/titleET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/title" />
+            android:hint="Title" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -34,7 +34,7 @@
             android:id="@+id/messageET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/message" />
+            android:hint="Message" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
