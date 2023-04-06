@@ -25,6 +25,9 @@
             android:name=".Dashboard"
             android:exported="false" />
         <activity
+            android:name=".Petfolio"
+            android:exported="false" />
+        <activity
             android:name=".Signuppage"
             android:exported="false" />
         <activity
