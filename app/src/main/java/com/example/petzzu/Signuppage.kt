@@ -40,7 +40,7 @@ class Signuppage : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(inputemail,inputpassword)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
+
                     val Intent = Intent(this,Dashboard::class.java)
                     startActivity(Intent)
 

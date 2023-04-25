@@ -16,11 +16,16 @@
         android:theme="@style/Theme.Petzzu"
         tools:targetApi="31">
         <activity
+            android:name=".Medication"
+            android:exported="false" />
+        <activity
             android:name=".Notification"
             android:exported="false" />
 
-        <receiver android:name=".Alarm"
-            android:enabled="true"/>
+        <receiver
+            android:name=".Alarm"
+            android:enabled="true" />
+
         <activity
             android:name=".Dashboard"
             android:exported="false" />
