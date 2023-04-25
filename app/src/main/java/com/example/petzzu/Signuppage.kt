@@ -30,7 +30,7 @@ class Signuppage : AppCompatActivity() {
         val password=findViewById<EditText>(R.id.password)
         val confirmPass=findViewById<EditText>(R.id.password1)
 
-        if(email.text.isEmpty() || password.text.isEmpty() || username.text.isEmpty() ||confirmPass.text.isEmpty() || password.text==confirmPass.text){
+        if(email.text.isEmpty() || password.text.isEmpty() || username.text.isEmpty() ||confirmPass.text.isEmpty() || password.text!=confirmPass.text){
             Toast.makeText(this,"Please fill all fields",Toast.LENGTH_SHORT).show()
             return
         }
