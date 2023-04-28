@@ -19,6 +19,11 @@ class Dashboard : AppCompatActivity() {
             startActivity(Intent)
         }
 
+        val trac=findViewById<ImageView>(R.id.tracking)
+        trac.setOnClickListener {
+            val Intent = Intent(this,Medication::class.java)
+            startActivity(Intent)
+        }
         val petf=findViewById<ImageView>(R.id.petfolio)
         petf.setOnClickListener{
             val Intent=Intent(this,Petfolio::class.java)
