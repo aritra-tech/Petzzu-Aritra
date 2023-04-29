@@ -2,6 +2,7 @@ package com.example.petzzu;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -58,8 +59,11 @@ public class Medication extends AppCompatActivity implements onDialogCloseListne
         mList=new ArrayList<>();
         adapter=new ToDoAdapter(Medication.this,mList);
 
-        recyclerView.setAdapter(adapter);
+        ItemTouchHelper itemTouchHelper=new ItemTouchHelper(new TouchHelper(adapter));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
         showData();
+        recyclerView.setAdapter(adapter);
+
     }
     private void showData(){
         query=firestore.collection("task").orderBy("time", Query.Direction.DESCENDING);
