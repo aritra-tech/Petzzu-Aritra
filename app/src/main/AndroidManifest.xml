@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Petzzu"
         tools:targetApi="31">
         <activity
+            android:name=".LocalNotification"
+            android:exported="false" />
+        <activity
             android:name=".Medication"
             android:exported="false" />
         <activity
