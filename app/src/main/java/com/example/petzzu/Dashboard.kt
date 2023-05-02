@@ -15,7 +15,7 @@ class Dashboard : AppCompatActivity() {
 
         val secondActbutton=findViewById<ImageView>(R.id.remind)
         secondActbutton.setOnClickListener {
-            val Intent = Intent(this,Notification::class.java)
+            val Intent = Intent(this,LocalNotification::class.java)
             startActivity(Intent)
         }
 
