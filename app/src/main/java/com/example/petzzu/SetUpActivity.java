@@ -2,6 +2,7 @@ package com.example.petzzu;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.UiContext;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -19,10 +20,12 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -46,6 +49,7 @@ public class SetUpActivity extends AppCompatActivity {
     private String Uid;
     private ProgressBar progressBar;
     private Uri downloadUri=null;
+    private boolean isphotoSelected=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,29 +70,51 @@ public class SetUpActivity extends AppCompatActivity {
         mProfileName=findViewById(R.id.profile_name);
         mSaveBtn=findViewById(R.id.save_btn);
 
+        firestore.collection("usersImage").document(Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    if (task.getResult().exists()){
+                        String name=task.getResult().getString("name");
+                        String imageUrl=task.getResult().getString("image");
+                        mProfileName.setText(name);
+                        mImageUri=Uri.parse(imageUrl);
+                        Glide.with(SetUpActivity.this).load(imageUrl).into(circleImageView);
+
+                    }
+                }
+            }
+        });
+
 
         mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
                 String name=mProfileName.getText().toString();
+                StorageReference imageRef=storageReference.child("Profile_Pics").child(Uid+".jpg");
+                if (isphotoSelected){
+                    if (!name.isEmpty() && mImageUri != null){
 
-                if (!name.isEmpty() && mImageUri != null){
-                    StorageReference imageRef=storageReference.child("Profile_Pics").child(Uid+".jpg");
-                    imageRef.putFile(mImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                            if (task.isSuccessful()){
-                                saveToFireStore(task,name,imageRef);
-                            }else {
-                                Toast.makeText(SetUpActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        imageRef.putFile(mImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                if (task.isSuccessful()){
+                                    saveToFireStore(task,name,imageRef);
+                                }else {
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                    Toast.makeText(SetUpActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
-                }else {
-                    Toast.makeText(SetUpActivity.this, "Please Select Image and Write Name", Toast.LENGTH_SHORT).show();
+                        });
+                    }else {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(SetUpActivity.this, "Please Select Image and Write Name", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                progressBar.setVisibility(View.INVISIBLE);
+                else {
+                    saveToFireStore(null,name,imageRef);
+                }
             }
         });
         circleImageView.setOnClickListener(new View.OnClickListener() {
@@ -109,25 +135,33 @@ public class SetUpActivity extends AppCompatActivity {
     }
 
     private void saveToFireStore(Task<UploadTask.TaskSnapshot> task, String name, StorageReference imageRef) {
-        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        if (task!=null){
+            imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    downloadUri=uri;
+
+                }
+            });
+        }else {
+            downloadUri=mImageUri;
+        }
+
+        HashMap<String,Object>map=new HashMap<>();
+        map.put("name",name);
+        map.put("image",downloadUri.toString());
+        firestore.collection("usersImage").document(Uid).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onSuccess(Uri uri) {
-                downloadUri=uri;
-                HashMap<String,Object>map=new HashMap<>();
-                map.put("name",name);
-                map.put("image",downloadUri.toString());
-                firestore.collection("usersImage").document(Uid).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()){
-                            Toast.makeText(SetUpActivity.this, "Profile Settings Saved", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(SetUpActivity.this,PetCommunity.class));
-                            finish();
-                        }else {
-                            Toast.makeText(SetUpActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                    progressBar.setVisibility(View.INVISIBLE);
+                    Toast.makeText(SetUpActivity.this, "Profile Settings Saved", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(SetUpActivity.this,PetCommunity.class));
+                    finish();
+                }else {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    Toast.makeText(SetUpActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -141,6 +175,7 @@ public class SetUpActivity extends AppCompatActivity {
             if (resultCode==RESULT_OK){
                 mImageUri=result.getUri();
                 circleImageView.setImageURI(mImageUri);
+                isphotoSelected=true;
             } else if (requestCode==CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Toast.makeText(this, result.getError().getMessage(), Toast.LENGTH_SHORT).show();
             }
