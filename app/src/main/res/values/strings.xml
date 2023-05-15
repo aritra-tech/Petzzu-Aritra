@@ -3,4 +3,12 @@
     <string name="schedule_notification"> Schedule Notification</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="profile">My Profile</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="username">Enter Your Name</string>
+    <string name="save">Save</string>
+    <string name="add_post">Add Post</string>
+    <string name="enter_caption">Write Caption here ....</string>
+    <string name="add_comment">Add Comment</string>
+    <string name="write_Comment">Write Your Comment</string>
 </resources>

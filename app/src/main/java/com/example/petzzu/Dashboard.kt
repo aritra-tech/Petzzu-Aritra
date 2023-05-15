@@ -29,5 +29,11 @@ class Dashboard : AppCompatActivity() {
             val Intent=Intent(this,Petfolio::class.java)
             startActivity(Intent)
         }
+
+        val communityy=findViewById<ImageView>(R.id.community)
+        communityy.setOnClickListener{
+            val Intent=Intent(this,PetCommunity::class.java)
+            startActivity(Intent)
+        }
     }
 }
