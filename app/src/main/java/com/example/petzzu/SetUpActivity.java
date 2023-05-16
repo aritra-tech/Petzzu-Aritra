@@ -43,12 +43,12 @@ public class SetUpActivity extends AppCompatActivity {
     private EditText mProfileName;
     private Button mSaveBtn;
     private FirebaseAuth auth;
-    private Uri mImageUri;
+    private Uri mImageUri=null;
     private StorageReference storageReference;
     private FirebaseFirestore firestore;
     private String Uid;
     private ProgressBar progressBar;
-    private Uri downloadUri=null;
+
     private boolean isphotoSelected=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +100,13 @@ public class SetUpActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                 if (task.isSuccessful()){
-                                    saveToFireStore(task,name,imageRef);
+                                    imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            saveToFireStore(task,name,uri);
+                                        }
+                                    });
+
                                 }else {
                                     progressBar.setVisibility(View.INVISIBLE);
                                     Toast.makeText(SetUpActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -113,16 +119,16 @@ public class SetUpActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    saveToFireStore(null,name,imageRef);
+                    saveToFireStore(null,name,mImageUri);
                 }
             }
         });
         circleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
                     if (ContextCompat.checkSelfPermission(SetUpActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
-                        ActivityCompat.requestPermissions(SetUpActivity.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                        ActivityCompat.requestPermissions(SetUpActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
                     }else{
                         CropImage.activity()
                                 .setGuidelines(CropImageView.Guidelines.ON)
@@ -134,18 +140,8 @@ public class SetUpActivity extends AppCompatActivity {
         });
     }
 
-    private void saveToFireStore(Task<UploadTask.TaskSnapshot> task, String name, StorageReference imageRef) {
-        if (task!=null){
-            imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    downloadUri=uri;
+    private void saveToFireStore(Task<UploadTask.TaskSnapshot> task, String name, Uri downloadUri) {
 
-                }
-            });
-        }else {
-            downloadUri=mImageUri;
-        }
 
         HashMap<String,Object>map=new HashMap<>();
         map.put("name",name);
