@@ -1,6 +1,7 @@
 package com.example.petzzu.Adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.petzzu.CommentsActivity;
 import com.example.petzzu.Model.Post;
 import com.example.petzzu.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -124,6 +126,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             }
         });
 
+        holder.commentPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent commentIntent=new Intent(context, CommentsActivity.class);
+                commentIntent.putExtra("postid",postId);
+                context.startActivity(commentIntent);
+            }
+        });
+
     }
 
     @Override
@@ -140,11 +151,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             super(itemView);
             mView=itemView;
             likePic=mView.findViewById(R.id.like_btn);
+            commentPic=mView.findViewById(R.id.comments_post);
 
         }
         public void setPostLikes(int count){
             postLikes=mView.findViewById(R.id.like_count_tv);
-            postLikes.setText(count+"Likes");
+            postLikes.setText(count+" Likes");
         }
         public void setPostPic(String urlPost){
             postPic=mView.findViewById(R.id.user_post);
