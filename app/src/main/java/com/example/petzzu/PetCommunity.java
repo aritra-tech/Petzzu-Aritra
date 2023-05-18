@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.petzzu.Adapter.PostAdapter;
 import com.example.petzzu.Model.Post;
+import com.example.petzzu.Model.Users;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -45,6 +46,7 @@ public class PetCommunity extends AppCompatActivity {
     private List<Post> list;
     private Query query;
     private ListenerRegistration listenerRegistration;
+    private List<Users> usersList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +59,8 @@ public class PetCommunity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(PetCommunity.this));
         list=new ArrayList<>();
-        adapter=new PostAdapter(PetCommunity.this,list);
+        usersList=new ArrayList<>();
+        adapter=new PostAdapter(PetCommunity.this,list,usersList);
         mRecyclerView.setAdapter(adapter);
         fab=findViewById(R.id.floatingActionButton);
         setSupportActionBar(mainToolBar);
@@ -88,8 +91,21 @@ public class PetCommunity extends AppCompatActivity {
                         if (doc.getType()==DocumentChange.Type.ADDED){
                             String postId=doc.getDocument().getId();
                             Post post=doc.getDocument().toObject(Post.class).withId(postId);
-                            list.add(post);
-                            adapter.notifyDataSetChanged();
+                            String postUserId=doc.getDocument().getString("user");
+                            firestore.collection("usersImage").document(postUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()){
+                                        Users users=task.getResult().toObject(Users.class);
+                                        usersList.add(users);
+                                        list.add(post);
+                                        adapter.notifyDataSetChanged();
+                                    }else {
+                                        Toast.makeText(PetCommunity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+
                         }
                         else {
                             adapter.notifyDataSetChanged();

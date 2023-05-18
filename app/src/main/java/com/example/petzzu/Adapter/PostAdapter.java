@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.petzzu.CommentsActivity;
 import com.example.petzzu.Model.Post;
+import com.example.petzzu.Model.Users;
 import com.example.petzzu.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,14 +38,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     private List<Post> mList;
-
+    private List<Users> usersList;
     private Activity context;
     private FirebaseFirestore firestore;
     private FirebaseAuth auth;
 
-    public PostAdapter(Activity context,List<Post> mList){
+    public PostAdapter(Activity context,List<Post> mList,List<Users> usersList){
         this.mList=mList;
         this.context=context;
+        this.usersList=usersList;
     }
     @NonNull
     @Override
@@ -65,19 +67,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.setPostDate(date);
 
         String userId= post.getUser();
-        firestore.collection("userImage").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    String username=task.getResult().getString("name");
-                    String image=task.getResult().getString("image");
-                    holder.setProfilePic(image);
-                    holder.setPostUsername(username);
-                }else {
-                    Toast.makeText(context, task.getException().toString(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+
+        String username=usersList.get(position).getName();
+        String image=usersList.get(position).getImage();
+        holder.setProfilePic(image);
+        holder.setPostUsername(username);
+
         String postId= post.PostId;
         String currentUserId=auth.getCurrentUser().getUid();
         holder.likePic.setOnClickListener(new View.OnClickListener() {
