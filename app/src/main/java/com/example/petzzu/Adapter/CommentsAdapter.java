@@ -9,17 +9,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.petzzu.Model.Comments;
+import com.example.petzzu.Model.Users;
 import com.example.petzzu.R;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder> {
     private Activity context;
+    private List<Users> usersList;
     private List<Comments> commentsList;
-    public CommentsAdapter(Activity context,List<Comments> commentsList){
+
+    public CommentsAdapter(Activity context,List<Comments> commentsList,List<Users> usersList){
         this.context=context;
         this.commentsList=commentsList;
+        this.usersList=usersList;
     }
     @NonNull
     @Override
@@ -27,11 +34,17 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         View view= LayoutInflater.from(context).inflate(R.layout.each_comment,parent,false);
         return new CommentsViewHolder(view);
     }
+    public void setList(){
+        notifyDataSetChanged();
+    }
 
     @Override
     public void onBindViewHolder(@NonNull CommentsViewHolder holder, int position) {
         Comments comments=commentsList.get(position);
         holder.setmComment(comments.getComment());
+        Users users=usersList.get(position);
+        holder.setmUserName(users.getName());
+        holder.setCircleImageView(users.getImage());
     }
 
     @Override
@@ -40,7 +53,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     }
 
     public class CommentsViewHolder extends RecyclerView.ViewHolder{
-        TextView mComment;
+        TextView mComment,mUserName;
+        CircleImageView circleImageView;
         View mView;
         public CommentsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -49,6 +63,14 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         public void setmComment(String comment){
             mComment=mView.findViewById(R.id.comment_tv);
             mComment.setText(comment);
+        }
+        public void setmUserName(String userName){
+            mUserName=mView.findViewById(R.id.comment_user);
+            mUserName.setText(userName);
+        }
+        public void setCircleImageView(String profilePic){
+            circleImageView=mView.findViewById(R.id.comment_Profile_pic);
+            Glide.with(context).load(profilePic).into(circleImageView);
         }
     }
 }
