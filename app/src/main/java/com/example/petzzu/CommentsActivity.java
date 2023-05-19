@@ -67,7 +67,7 @@ public class CommentsActivity extends AppCompatActivity {
         mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mCommentRecyclerView.setAdapter(adapter);
 
-        firestore.collection("Posts/"+post_id+"/Comments").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        firestore.collection("Posts/"+post_id+"/Comments").addSnapshotListener(CommentsActivity.this,new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 for (DocumentChange documentChange: value.getDocumentChanges()){
