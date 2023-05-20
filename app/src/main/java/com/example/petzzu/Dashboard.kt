@@ -35,5 +35,11 @@ class Dashboard : AppCompatActivity() {
             val Intent=Intent(this,PetCommunity::class.java)
             startActivity(Intent)
         }
+
+        val emergencyy=findViewById<ImageView>(R.id.emergency)
+        emergencyy.setOnClickListener{
+            val Intent=Intent(this,EmergencyContacts::class.java)
+            startActivity(Intent)
+        }
     }
 }

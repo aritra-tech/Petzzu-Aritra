@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:background="#E8EDF5"
+    tools:context=".EmergencyContacts">
+
+    <ImageView
+        android:id="@+id/thumbnailIv"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:background="#c0c0c0"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/baseline_person_24"
+        />
+    <EditText
+        android:id="@+id/firstNameEt"
+        android:layout_below="@+id/thumbnailIv"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="First Name"
+        android:background="#fff"
+        android:textColorHint="#000"
+        android:textColor="#000"
+        android:padding="10dp"
+        android:inputType="textPersonName"
+        />
+    <EditText
+        android:id="@+id/lastNameEt"
+        android:layout_below="@+id/firstNameEt"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Last Name"
+        android:background="#fff"
+        android:textColorHint="#000"
+        android:textColor="#000"
+        android:padding="10dp"
+        android:inputType="textPersonName"
+        />
+    <EditText
+        android:id="@+id/mobilephoneEt"
+        android:layout_below="@+id/lastNameEt"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Phone(mobile)"
+        android:background="#fff"
+        android:textColorHint="#000"
+        android:textColor="#000"
+        android:padding="10dp"
+        android:inputType="phone"
+        />
+
+    <EditText
+        android:id="@+id/phoneHomeEt"
+        android:layout_below="@+id/mobilephoneEt"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Phone(Home)"
+        android:background="#fff"
+        android:textColorHint="#000"
+        android:textColor="#000"
+        android:padding="10dp"
+        android:inputType="phone"
+        />
+    <EditText
+        android:id="@+id/emailEt"
+        android:layout_below="@+id/phoneHomeEt"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Email"
+        android:background="#fff"
+        android:textColorHint="#000"
+        android:textColor="#000"
+        android:padding="10dp"
+        android:inputType="textEmailAddress"
+        />
+    <EditText
+        android:id="@+id/addressEt"
+        android:layout_below="@+id/emailEt"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Postal Address"
+        android:background="#fff"
+        android:textColorHint="#000"
+        android:textColor="#000"
+        android:padding="10dp"
+        android:inputType="textPostalAddress"
+        />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/favSave"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:src="@drawable/baseline_done_24"
+        android:contentDescription="null"
+        />
+
+
+
+</RelativeLayout>
