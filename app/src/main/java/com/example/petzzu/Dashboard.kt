@@ -41,5 +41,10 @@ class Dashboard : AppCompatActivity() {
             val Intent=Intent(this,EmergencyContacts::class.java)
             startActivity(Intent)
         }
+        val chatbott=findViewById<ImageView>(R.id.chatbot)
+        chatbott.setOnClickListener{
+            val Intent=Intent(this,ChatBot::class.java)
+            startActivity(Intent)
+        }
     }
 }
